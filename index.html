@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your CodeBuddy - GitHub Repository Analyzer</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <meta name="description" content="Your CodeBuddy helps you extract and analyze information from any public GitHub repository.">
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-code"></i>
+            <h1>Your CodeBuddy</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Unlock the Power of Your GitHub Repositories</h2>
+                <p>Extract insights, analyze code, and get intelligent recommendations for any public GitHub repository.</p>
+                <div class="repo-input">
+                    <input type="text" id="repo-url" placeholder="Enter GitHub repository URL (e.g., https://github.com/username/repo)">
+                    <button id="analyze-btn">Analyze Repository</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="images/hero-illustration.svg" alt="Repository analysis illustration">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h3>Project Structure Analysis</h3>
+                    <p>Extract and visualize the project structure and code files from any repository.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+                    <h3>README & Analysis Generation</h3>
+                    <p>Generate or improve README.md files and create detailed ANALYSIS.md with insights.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-code-branch"></i></div>
+                    <h3>Language & Tech Detection</h3>
+                    <p>Automatically detect programming languages, frameworks, and technologies used.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                    <h3>Intelligent Chatbot</h3>
+                    <p>Ask questions about the repository and get accurate, context-aware answers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section (Initially Hidden) -->
+    <section id="dashboard" class="dashboard hidden">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2 id="repo-name">Repository Analysis</h2>
+                <div class="repo-meta">
+                    <span id="repo-owner"></span>
+                    <span id="repo-stars"><i class="fas fa-star"></i> 0</span>
+                    <span id="repo-forks"><i class="fas fa-code-branch"></i> 0</span>
+                </div>
+            </div>
+
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" data-tab="structure">Structure</button>
+                <button class="tab-btn" data-tab="readme">README</button>
+                <button class="tab-btn" data-tab="analysis">ANALYSIS</button>
+                <button class="tab-btn" data-tab="tech-stack">Tech Stack</button>
+                <button class="tab-btn" data-tab="chatbot">Ask CodeBuddy</button>
+                <button class="tab-btn" data-tab="management">Management</button>
+            </div>
+
+            <div class="tab-content">
+                <!-- Structure Tab -->
+                <div id="structure-tab" class="tab-pane active">
+                    <div class="structure-view">
+                        <div class="file-tree">
+                            <h3>Project Files</h3>
+                            <div id="file-tree-container"></div>
+                        </div>
+                        <div class="code-viewer">
+                            <div class="code-header">
+                                <span id="current-file">Select a file</span>
+                                <div class="code-actions">
+                                    <button id="copy-code-btn" title="Copy Code"><i class="fas fa-copy"></i></button>
+                                </div>
+                            </div>
+                            <pre id="code-display"><code>// Code will display here</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- README Tab -->
+                <div id="readme-tab" class="tab-pane">
+                    <div class="readme-actions">
+                        <button id="generate-readme-btn">Generate Improved README</button>
+                        <button id="copy-readme-btn"><i class="fas fa-copy"></i> Copy</button>
+                        <button id="download-readme-btn"><i class="fas fa-download"></i> Download</button>
+                    </div>
+                    <div id="readme-content" class="markdown-content"></div>
+                </div>
+
+                <!-- Analysis Tab -->
+                <div id="analysis-tab" class="tab-pane">
+                    <div class="analysis-actions">
+                        <button id="generate-analysis-btn">Generate Analysis Report</button>
+                        <button id="copy-analysis-btn"><i class="fas fa-copy"></i> Copy</button>
+                        <button id="download-analysis-btn"><i class="fas fa-download"></i> Download</button>
+                    </div>
+                    <div id="analysis-content" class="markdown-content"></div>
+                </div>
+
+                <!-- Tech Stack Tab -->
+                <div id="tech-stack-tab" class="tab-pane">
+                    <div class="tech-stack-container">
+                        <div class="tech-summary">
+                            <h3>Technology Summary</h3>
+                            <div id="tech-summary-content"></div>
+                        </div>
+                        <div class="tech-visualization">
+                            <h3>Language Distribution</h3>
+                            <canvas id="language-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chatbot Tab -->
+                <div id="chatbot-tab" class="tab-pane">
+                    <div class="chatbot-container">
+                        <div id="chat-messages">
+                            <div class="chat-message bot">
+                                <div class="message-content">
+                                    <p>Hello! I'm your CodeBuddy assistant. Ask me anything about this repository!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="user-message" placeholder="Ask about code, structure, or functionality...">
+                            <button id="send-message-btn"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Management Tab -->
+                <div id="management-tab" class="tab-pane">
+                    <div class="management-container">
+                        <h3>Clone Repository</h3>
+                        <div class="command-box">
+                            <pre id="clone-command">git clone [repository-url]</pre>
+                            <button class="copy-command" data-command="clone"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <h3>Make Changes & Contribute</h3>
+                        <div class="step-guide">
+                            <ol>
+                                <li>Create a new branch: <code>git checkout -b feature/your-feature-name</code></li>
+                                <li>Make your changes to the code.</li>
+                                <li>Add changes: <code>git add .</code></li>
+                                <li>Commit changes: <code>git commit -m "Your commit message"</code></li>
+                                <li>Push to your branch: <code>git push origin feature/your-feature-name</code></li>
+                                <li>Open a Pull Request on GitHub.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <!-- Content remains the same -->
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <!-- Content remains the same -->
+    </section>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="hidden">
+        <div class="loader"></div>
+        <p id="loading-message">Analyzing repository...</p>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Your CodeBuddy. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/github-api.js"></script>
+<script src="js/file-viewer.js"></script>
+<script src="js/analyzer.js"></script>
+<script src="js/chatbot.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
