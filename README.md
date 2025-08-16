@@ -97,5 +97,5 @@ Contributions are welcome! If you have ideas for new features or have found a bu
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
 
 ---
-Made with ❤️ by [Your Name](https://github.com/YOUR-USERNAME)
+
 
