@@ -1,28 +1,15 @@
-/**
- * Creates a nested object structure from a flat file list.
- * @param {Array<object>} fileList - The flat list of files from GitHub API.
- * @returns {object} - A nested object representing the directory structure.
- */
 function createFileStructure(fileList) {
     const fileStructure = {};
     fileList.forEach(file => {
         let currentLevel = fileStructure;
         const pathParts = file.path.split('/');
-
         pathParts.forEach((part, index) => {
             if (index === pathParts.length - 1) {
-                // This is the last part, so it's a file.
                 currentLevel[part] = { type: 'file', url: file.url, path: file.path };
             } else {
-                // This is a directory part of the path.
-                //
-                // **THE FIX IS HERE:**
-                // If the entry doesn't exist OR if it was previously (and incorrectly)
-                // marked as a file, we overwrite it and ensure it's a folder.
                 if (!currentLevel[part] || currentLevel[part].type !== 'folder') {
                     currentLevel[part] = { type: 'folder', children: {} };
                 }
-                // Now we can safely access .children.
                 currentLevel = currentLevel[part].children;
             }
         });
@@ -30,29 +17,33 @@ function createFileStructure(fileList) {
     return fileStructure;
 }
 
-
-/**
- * Renders the file tree into the DOM.
- * @param {object} structure - The nested file structure.
- * @param {HTMLElement} container - The container element to render into.
- */
 function renderFileTree(structure, container) {
     container.innerHTML = '';
-    const treeElement = createDirectoryElement(structure);
+    const treeElement = createDirectoryElement(structure, 'root');
     container.appendChild(treeElement);
-    addFileClickListeners();
+    addFileClickListeners(container);
 }
 
-function createDirectoryElement(directory) {
+function createDirectoryElement(directory, name) {
     const ul = document.createElement('ul');
-    ul.className = 'directory';
-    Object.keys(directory).sort().forEach(key => {
+    if (name !== 'root') ul.className = 'directory';
+    
+    // Sort so folders appear before files
+    const sortedKeys = Object.keys(directory).sort((a, b) => {
+        const itemA = directory[a];
+        const itemB = directory[b];
+        if (itemA.type === 'folder' && itemB.type !== 'folder') return -1;
+        if (itemA.type !== 'folder' && itemB.type === 'folder') return 1;
+        return a.localeCompare(b);
+    });
+
+    sortedKeys.forEach(key => {
         const item = directory[key];
         const li = document.createElement('li');
         if (item.type === 'folder') {
             li.innerHTML = `<i class="fas fa-folder"></i> ${key}`;
             li.className = 'folder';
-            li.appendChild(createDirectoryElement(item.children));
+            li.appendChild(createDirectoryElement(item.children, key));
             li.addEventListener('click', (e) => {
                 e.stopPropagation();
                 li.classList.toggle('open');
@@ -68,15 +59,16 @@ function createDirectoryElement(directory) {
     return ul;
 }
 
-/**
- * Adds click listeners to all file elements in the tree.
- */
-function addFileClickListeners() {
-    document.querySelectorAll('.file-tree .file').forEach(fileEl => {
-        fileEl.addEventListener('click', async (e) => {
+function addFileClickListeners(container) {
+    container.addEventListener('click', async (e) => {
+        const fileEl = e.target.closest('.file');
+        if (fileEl) {
             e.stopPropagation();
-            const url = e.currentTarget.dataset.url;
-            const path = e.currentTarget.dataset.path;
+            const { url, path } = fileEl.dataset;
+            
+            // Highlight selected file
+            container.querySelectorAll('.file.selected').forEach(el => el.classList.remove('selected'));
+            fileEl.classList.add('selected');
             
             document.getElementById('current-file').textContent = 'Loading...';
             document.getElementById('code-display').textContent = '';
@@ -88,15 +80,10 @@ function addFileClickListeners() {
                 document.getElementById('current-file').textContent = `Error loading ${path}`;
                 console.error(error);
             }
-        });
+        }
     });
 }
 
-/**
- * Displays file content in the code viewer with syntax highlighting.
- * @param {string} path - The path of the file.
- * @param {string} content - The content of the file.
- */
 function displayFileContent(path, content) {
     const codeDisplay = document.getElementById('code-display');
     const currentFile = document.getElementById('current-file');

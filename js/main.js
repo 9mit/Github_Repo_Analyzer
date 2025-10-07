@@ -26,13 +26,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Documentation generation
-    document.getElementById('generate-readme-btn').addEventListener('click', () => {
-        const content = generateImprovedReadme(currentRepoData, currentRepoLanguages);
-        document.getElementById('readme-content').innerHTML = marked.parse(content);
+    document.getElementById('generate-readme-btn').addEventListener('click', async () => {
+        const readmeContentEl = document.getElementById('readme-content');
+        readmeContentEl.innerHTML = `<h3><i class="fas fa-sync fa-spin"></i> Generating smart README...</h3>`;
+        
+        const packageJsonFile = currentRepoStructure.find(f => f.path.toLowerCase().endsWith('package.json'));
+        let packageJsonContent = null;
+        if (packageJsonFile) {
+            try {
+                packageJsonContent = await fetchFileContent(packageJsonFile.url);
+            } catch (e) { console.error("Could not fetch package.json for README generation"); }
+        }
+        
+        const content = generateSmartReadme(currentRepoData, currentRepoLanguages, currentRepoStructure, packageJsonContent);
+        readmeContentEl.innerHTML = marked.parse(content);
+        // Re-highlight any code blocks in the generated markdown
+        readmeContentEl.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
     });
-    document.getElementById('generate-analysis-btn').addEventListener('click', () => {
-        const content = generateAnalysisReport(currentRepoData, currentRepoLanguages, currentRepoStructure);
-        document.getElementById('analysis-content').innerHTML = marked.parse(content);
+
+    document.getElementById('generate-analysis-btn').addEventListener('click', async () => {
+        const analysisContentEl = document.getElementById('analysis-content');
+        analysisContentEl.innerHTML = `<h3><i class="fas fa-sync fa-spin"></i> Performing smart analysis...</h3>`;
+        
+        const packageJsonFile = currentRepoStructure.find(f => f.path.toLowerCase().endsWith('package.json'));
+        let packageJsonContent = null;
+        if (packageJsonFile) {
+            try {
+                packageJsonContent = await fetchFileContent(packageJsonFile.url);
+            } catch (e) { console.error("Could not fetch package.json for analysis"); }
+        }
+
+        const content = generateSmartAnalysisReport(currentRepoData, currentRepoLanguages, currentRepoStructure, packageJsonContent);
+        analysisContentEl.innerHTML = marked.parse(content);
+        // Re-highlight any code blocks in the generated markdown
+        analysisContentEl.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
     });
     
     // Chatbot
@@ -133,7 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // README Tab
         fetchReadme(currentRepoData.owner.login, currentRepoData.name)
             .then(content => {
-                document.getElementById('readme-content').innerHTML = marked.parse(content);
+                const readmeContentEl = document.getElementById('readme-content');
+                readmeContentEl.innerHTML = marked.parse(content);
+                readmeContentEl.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
             });
         
         // Tech Stack Tab
@@ -152,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderTechStack() {
         // Summary
         const summaryContainer = document.getElementById('tech-summary-content');
-        let summaryHTML = `<p><strong>Primary Language:</strong> ${currentRepoData.language}</p>`;
+        let summaryHTML = `<p><strong>Primary Language:</strong> ${currentRepoData.language || 'N/A'}</p>`;
         summaryHTML += '<ul>';
         for (const lang in currentRepoLanguages) {
             summaryHTML += `<li>${lang}</li>`;
@@ -163,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Chart
         const ctx = document.getElementById('language-chart').getContext('2d');
         if (languageChart) languageChart.destroy();
+        
         languageChart = new Chart(ctx, {
             type: 'pie',
             data: {
@@ -171,12 +201,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     label: 'Language Distribution',
                     data: Object.values(currentRepoLanguages),
                     backgroundColor: [
-                        '#3498db', '#f1c40f', '#e74c3c', '#9b59b6',
-                        '#2ecc71', '#e67e22', '#1abc9c', '#34495e'
+                        '#4f46e5', '#f59e0b', '#ef4444', '#8b5cf6',
+                        '#10b981', '#f97316', '#06b6d4', '#374151'
                     ],
+                    borderColor: '#1f2937', // Matches card background
+                    borderWidth: 2
                 }]
             },
-            options: { responsive: true, maintainAspectRatio: false }
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#d1d5db' // Matches text color
+                        }
+                    }
+                }
+            }
         });
     }
 
@@ -210,6 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`${type} copied to clipboard!`);
         }).catch(err => {
             console.error('Failed to copy: ', err);
+            alert(`Failed to copy ${type}.`);
         });
     }
 
@@ -224,3 +267,4 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(element);
     }
 });
+
