@@ -3,6 +3,8 @@
 
 # Your CodeBuddy - GitHub Repository Analyzer
 
+https://githubrepoanalyzerr.netlify.app/ --> Live version
+
 ![GitHub deployments](https://img.shields.io/github/deployments/YOUR-USERNAME/your-codebuddy/github-pages?label=Live%20Demo&logo=github)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
