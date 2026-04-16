@@ -1,0 +1,43 @@
+# Netlify Configuration for CodeBuddy
+# This file configures how Netlify builds and deploys your site
+
+[build]
+  # Publish the root directory
+  publish = "."
+  
+  # Functions directory for serverless functions
+  functions = "netlify/functions"
+  
+  [build.environment]
+    NODE_VERSION = "20"
+
+[functions]
+  # Use ES modules for functions
+  node_bundler = "esbuild"
+
+# Headers for security and caching
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.github.com https://*.netlify.app; img-src 'self' data: https://avatars.githubusercontent.com https://img.shields.io;"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/js/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/css/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

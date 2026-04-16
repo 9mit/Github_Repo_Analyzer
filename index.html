@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your CodeBuddy - GitHub Repository Analyzer</title>
+    <meta name="description"
+        content="Your CodeBuddy helps you extract and analyze information from any public GitHub repository.">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <h1>Your CodeBuddy</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#about">About</a></li>
+    
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2>Unlock the Power of <span>GitHub Repositories</span></h2>
+                    <p>Extract insights, analyze code structure, and get intelligent recommendations with our AI-powered
+                        analyzer. No signup required.</p>
+                    <div class="analysis-toggle">
+                        <button class="toggle-btn active" data-mode="repo">Analyze Repo</button>
+                        <button class="toggle-btn" data-mode="profile">Analyze Profile</button>
+                    </div>
+
+                    <div id="repo-input-container" class="repo-input">
+                        <input type="text" id="repo-url"
+                            placeholder="Enter GitHub repository URL (e.g., https://github.com/username/repo)">
+                        <button id="analyze-btn">Analyze Repository</button>
+                    </div>
+
+                    <div id="profile-input-container" class="repo-input hidden">
+                        <input type="text" id="profile-url"
+                            placeholder="Enter GitHub Username or Profile URL">
+                        <button id="analyze-profile-btn">Analyze Profile</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="images/hero-illustration.svg" alt="Repository analysis illustration">
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section (Initially Hidden) - NOW FIRST -->
+        <section id="dashboard" class="dashboard hidden">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2 id="repo-name">Repository Analysis</h2>
+                    <div class="repo-meta">
+                        <span id="repo-owner"></span>
+                        <span id="repo-stars"><i class="fas fa-star"></i> 0</span>
+                        <span id="repo-forks"><i class="fas fa-code-branch"></i> 0</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-tabs">
+                    <button class="tab-btn active" data-tab="structure">Structure</button>
+                    <button class="tab-btn" data-tab="readme">README</button>
+                    <button class="tab-btn" data-tab="analysis">ANALYSIS</button>
+                    <button class="tab-btn" data-tab="tech-stack">Tech Stack</button>
+                    <button class="tab-btn" data-tab="chatbot">Ask CodeBuddy</button>
+                    <button class="tab-btn" data-tab="management">Management</button>
+                </div>
+
+                <div class="tab-content">
+                    <div id="structure-tab" class="tab-pane active">
+                        <div class="structure-view">
+                            <div class="file-tree">
+                                <h3>Project Files</h3>
+                                <div id="file-tree-container"></div>
+                            </div>
+                            <div class="code-viewer">
+                                <div class="code-header">
+                                    <span id="current-file">Select a file</span>
+                                    <div class="code-actions">
+                                        <button id="copy-code-btn" title="Copy Code"><i
+                                                class="fas fa-copy"></i></button>
+                                    </div>
+                                </div>
+                                <pre id="code-display"><code>// Code will display here</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="readme-tab" class="tab-pane">
+                        <div class="readme-actions">
+                            <button id="generate-readme-btn">Generate README</button>
+                            <button id="copy-readme-btn"><i class="fas fa-copy"></i> Copy</button>
+                            <button id="download-readme-btn"><i class="fas fa-download"></i> Download</button>
+                        </div>
+                        <div id="readme-content" class="markdown-content"></div>
+                    </div>
+
+                    <div id="analysis-tab" class="tab-pane">
+                        <div class="analysis-actions">
+                            <button id="generate-analysis-btn">Generate Analysis Report</button>
+                            <button id="copy-analysis-btn"><i class="fas fa-copy"></i> Copy</button>
+                            <button id="download-analysis-btn"><i class="fas fa-download"></i> Download</button>
+                        </div>
+                        <div id="analysis-content" class="markdown-content"></div>
+                    </div>
+
+                    <div id="tech-stack-tab" class="tab-pane">
+                        <div class="tech-stack-container">
+                            <div class="tech-summary">
+                                <h3>Technology Summary</h3>
+                                <div id="tech-summary-content"></div>
+                            </div>
+                            <div class="tech-visualization">
+                                <h3>Language Distribution</h3>
+                                <canvas id="language-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="chatbot-tab" class="tab-pane">
+                        <div class="chatbot-container">
+                            <div id="chat-messages">
+                                <div class="chat-message bot">
+                                    <div class="message-content">
+                                        <p>Hello! I'm your CodeBuddy assistant. Ask me anything about this repository!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input">
+                                <input type="text" id="user-message"
+                                    placeholder="Ask about code, structure, or functionality...">
+                                <button id="send-message-btn"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="management-tab" class="tab-pane">
+                        <div class="management-container">
+                            <h3><i class="fas fa-download"></i> Download Repository</h3>
+                            <div class="download-options">
+                                <button id="download-zip-btn" class="download-btn">
+                                    <i class="fas fa-file-archive"></i>
+                                    <span>
+                                        <strong>Download ZIP</strong>
+                                        <small>Download source code as .zip file</small>
+                                    </span>
+                                </button>
+                                <a id="view-github-btn" href="#" target="_blank" class="download-btn secondary">
+                                    <i class="fab fa-github"></i>
+                                    <span>
+                                        <strong>View on GitHub</strong>
+                                        <small>Open repository in new tab</small>
+                                    </span>
+                                </a>
+                            </div>
+
+                            <h3><i class="fas fa-terminal"></i> Clone Repository</h3>
+                            <div class="command-box">
+                                <pre id="clone-command">git clone [repository-url]</pre>
+                                <button class="copy-command" data-command="clone"><i class="fas fa-copy"></i></button>
+                            </div>
+
+                            <h3><i class="fas fa-code-branch"></i> Make Changes & Contribute</h3>
+                            <div class="step-guide">
+                                <ol>
+                                    <li>Create a new branch: <code>git checkout -b feature/your-feature-name</code></li>
+                                    <li>Make your changes to the code.</li>
+                                    <li>Add changes: <code>git add .</code></li>
+                                    <li>Commit changes: <code>git commit -m "Your commit message"</code></li>
+                                    <li>Push to your branch: <code>git push origin feature/your-feature-name</code></li>
+                                    <li>Open a Pull Request on GitHub.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Dashboard Section -->
+        <section id="profile-dashboard" class="profile-dashboard hidden">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2 id="profile-name-display">User Profile</h2>
+                    <div class="profile-meta">
+                        <span id="profile-repo-count"><i class="fas fa-book"></i> 0 Repositories</span>
+                    </div>
+                </div>
+
+                <div class="ai-ranking-action">
+                    <button id="generate-profile-ranking-btn">
+                        <i class="fas fa-magic"></i> Generate Expert Ranking
+                    </button>
+                </div>
+                
+                <div id="profile-ranking-container" class="markdown-content hidden"></div>
+
+                <div class="profile-content">
+                    <div class="table-responsive">
+                        <table id="profile-repos-table">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Repository Name</th>
+                                    <th>Stars</th>
+                                    <th>Deployment Link</th>
+                                </tr>
+                            </thead>
+                            <tbody id="profile-repos-body">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title">Key Features</h2>
+                <p class="section-subtitle">Powerful tools to understand any GitHub repository in seconds</p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-project-diagram"></i></div>
+                        <h3>Project Structure Analysis</h3>
+                        <p>Visualize the complete file tree with an interactive explorer. Click on any file to view its
+                            contents with syntax highlighting. Understand the project organization at a glance.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Interactive file tree navigation</li>
+                            <li><i class="fas fa-check"></i> File-type specific icons</li>
+                            <li><i class="fas fa-check"></i> Syntax-highlighted code preview</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-magic"></i></div>
+                        <h3>Expert Profile Ranking</h3>
+                        <p>Analyze any GitHub profile to extract a curated list of top-tier repositories. Let our Principal Engineer AI rank and evaluate the best projects based on technical merit.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Algorithmic project scoring</li>
+                            <li><i class="fas fa-check"></i> Deployment link detection</li>
+                            <li><i class="fas fa-check"></i> Expert AI qualitative analysis</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+                        <h3>README & Analysis Generation</h3>
+                        <p>Automatically generate professional README.md files with project badges, installation
+                            instructions, and usage guides. Get detailed analysis reports with code quality metrics.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Auto-generated badges & shields</li>
+                            <li><i class="fas fa-check"></i> Installation & usage sections</li>
+                            <li><i class="fas fa-check"></i> Code quality assessment</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-code-branch"></i></div>
+                        <h3>Language & Tech Detection</h3>
+                        <p>Automatically detect 25+ frameworks, libraries, and technologies used in the project. Get a
+                            visual breakdown of language distribution with interactive charts.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> 25+ framework detection</li>
+                            <li><i class="fas fa-check"></i> Dependency analysis</li>
+                            <li><i class="fas fa-check"></i> Visual language charts</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                        <h3>AI-Powered Chatbot</h3>
+                        <p>Chat with an intelligent AI assistant powered by Groq's lightning-fast LLM. Ask questions
+                            about the codebase, get explanations, and discover insights naturally.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Powered by Groq LLaMA</li>
+                            <li><i class="fas fa-check"></i> Context-aware responses</li>
+                            <li><i class="fas fa-check"></i> Code explanations</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-download"></i></div>
+                        <h3>Export & Download</h3>
+                        <p>Download generated README and analysis reports as markdown files. Copy code snippets, clone
+                            commands, and documentation with one click.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Download as .md files</li>
+                            <li><i class="fas fa-check"></i> One-click copy</li>
+                            <li><i class="fas fa-check"></i> Git clone commands</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                        <h3>100% Free & Private</h3>
+                        <p>No signup required. No data stored. Everything runs in your browser with direct GitHub API
+                            access. Analyze unlimited public repositories for free.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> No registration needed</li>
+                            <li><i class="fas fa-check"></i> No data collection</li>
+                            <li><i class="fas fa-check"></i> Unlimited analyses</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="how-it-works">
+            <div class="container">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-subtitle">Analyze any public GitHub repository in just 3 simple steps</p>
+
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3><i class="fas fa-link"></i> Paste Repository URL</h3>
+                            <p>Copy the URL of any public GitHub repository and paste it into the input field on the
+                                homepage. CodeBuddy supports all public repositories on GitHub.com.</p>
+                            <div class="step-example">
+                                <code>https://github.com/facebook/react</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3><i class="fas fa-play"></i> Click Analyze</h3>
+                            <p>Press the "Analyze Repository" button. CodeBuddy will connect to the GitHub API and fetch
+                                all the repository data including files, structure, languages, and metadata.</p>
+                            <div class="step-detail">
+                                <span><i class="fas fa-clock"></i> Takes 5-15 seconds</span>
+                                <span><i class="fas fa-lock"></i> No authentication required</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3><i class="fas fa-chart-bar"></i> Explore Results</h3>
+                            <p>Navigate through the interactive dashboard to explore the file structure, generated
+                                documentation, tech stack analysis, and chat with the AI assistant about the codebase.
+                            </p>
+                            <div class="step-tabs">
+                                <span class="step-tab"><i class="fas fa-folder"></i> Structure</span>
+                                <span class="step-tab"><i class="fas fa-file-alt"></i> README</span>
+                                <span class="step-tab"><i class="fas fa-chart-pie"></i> Analysis</span>
+                                <span class="step-tab"><i class="fas fa-robot"></i> AI Chat</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tips-box">
+                    <h4><i class="fas fa-lightbulb"></i> Pro Tips</h4>
+                    <ul>
+                        <li><strong>Large Repositories:</strong> For very large repos, analysis may take longer. The
+                            file tree is optimized for quick loading.</li>
+                        <li><strong>Private Repos:</strong> Currently only public repositories are supported. Private
+                            repo support coming soon!</li>
+                        <li><strong>Rate Limits:</strong> GitHub API has rate limits. If you hit them, wait a few
+                            minutes and try again.</li>
+                        <li><strong>AI Chat:</strong> For best results with the AI, ask specific questions about files,
+                            functions, or features.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="container">
+                <h2 class="section-title">About CodeBuddy</h2>
+
+                <div class="about-grid">
+                    <div class="about-content">
+                        <h3><i class="fas fa-rocket"></i> Our Mission</h3>
+                        <p>CodeBuddy was created to help developers quickly understand any GitHub repository without
+                            spending hours reading through code. Whether you're exploring a new library, contributing to
+                            open source, or evaluating a project, CodeBuddy gives you instant insights.</p>
+
+                        <h3><i class="fas fa-cogs"></i> Technology</h3>
+                        <p>Built with vanilla JavaScript, HTML, and CSS for maximum performance. Uses the GitHub REST
+                            API for data fetching and Groq's free LLaMA model for AI-powered chat. No backend required -
+                            everything runs directly in your browser.</p>
+
+                        <h3><i class="fas fa-shield-alt"></i> Privacy First</h3>
+                        <p>We don't store any data. All analysis happens in your browser. No accounts, no tracking, no
+                            cookies. Your repository exploration stays completely private.</p>
+                    </div>
+
+                    <div class="about-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-code"></i></div>
+                            <div class="stat-info">
+                                <h4>25+</h4>
+                                <p>Frameworks Detected</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-file-code"></i></div>
+                            <div class="stat-info">
+                                <h4>50+</h4>
+                                <p>File Types Supported</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-brain"></i></div>
+                            <div class="stat-info">
+                                <h4>AI</h4>
+                                <p>Powered by Groq</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-infinity"></i></div>
+                            <div class="stat-info">
+                                <h4>Unlimited</h4>
+                                <p>Free Analyses</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="open-source-banner">
+                    <div class="banner-content">
+                        <i class="fab fa-github"></i>
+                        <div>
+                            <h4>Open Source</h4>
+                            <p>CodeBuddy is open source. Star us on GitHub, report issues, or contribute to the project!
+                            </p>
+                        </div>
+                    </div>
+                    <a href="https://github.com/9mit/Github_Repo_Analyzer" class="banner-btn" target="_blank">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="hidden">
+            <div class="loader"></div>
+            <p id="loading-message">Analyzing repository...</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <script>document.write(new Date().getFullYear())</script> Your CodeBuddy. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js" integrity="sha512-H+rglffZ6f5gF7UJgvH4Naa+fGCgjrHKMgoFOGmcPTRwR6oILo5R+gtzNrpDp7iMV3udbymBVjkeZGNz1Em4rQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js" integrity="sha512-bgHRAiTjGrzHzLyKOnpFvaEpGzJet3z4tZnXGjpsCcqOnAH6VGUx9frc5bcIhKTVLEiCO6vEhNAgx5jtLUYrfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js" integrity="sha512-hzyXu3u+VDu/7vpPjRKFp9w33Idx7pWWNazPm+aCMRu26yZXFCby1gn1JxevVv3LDwnSbyKrvLo3JNdi4Qx1ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="js/github-api.js?v=1.2"></script>
+    <script src="js/file-viewer.js?v=1.2"></script>
+    <script src="js/analyzer.js?v=1.2"></script>
+    <script src="js/ai-engine.js?v=1.2"></script>
+    <script src="js/chatbot.js?v=1.2"></script>
+    <script src="js/profile-analyzer.js?v=1.2"></script>
+    <script src="js/main.js?v=1.2"></script>
+
+</body>
+
+</html>

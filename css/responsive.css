@@ -1,0 +1,446 @@
+/* ============================================================================
+   RESPONSIVE DESIGN - CodeBuddy
+   ============================================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    section {
+        padding: 80px 0;
+    }
+
+    .section-title {
+        font-size: 2.25rem;
+        margin-bottom: 40px;
+    }
+
+    /* Hero */
+    .hero {
+        padding: 80px 0;
+        min-height: auto;
+    }
+
+    .hero-content h2 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+
+    .repo-input {
+        flex-direction: column;
+        max-width: 100%;
+    }
+
+    .repo-input input {
+        border-radius: var(--radius-md);
+        text-align: center;
+    }
+
+    .repo-input button {
+        border-radius: var(--radius-md);
+        width: 100%;
+    }
+
+    .analysis-toggle {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+        flex: 1;
+        min-width: 140px;
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+
+    /* Dashboard */
+    .dashboard {
+        padding: 24px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dashboard-tabs {
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .structure-view {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .file-tree {
+        max-height: 300px;
+    }
+
+    .code-viewer {
+        min-height: 400px;
+    }
+
+    .tech-stack-container {
+        grid-template-columns: 1fr;
+    }
+
+    .chatbot-container {
+        height: 60vh;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    :root {
+        --radius-lg: 12px;
+        --radius-xl: 16px;
+    }
+
+    header .container {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    nav ul li a {
+        padding: 8px 14px;
+        font-size: 0.875rem;
+    }
+
+    .hero::before {
+        width: 400px;
+        height: 400px;
+    }
+
+    .hero-content h2 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+        margin-bottom: 32px;
+    }
+
+    .features-grid {
+        gap: 16px;
+    }
+
+    .feature-card {
+        padding: 24px;
+    }
+
+    .dashboard {
+        padding: 16px;
+        border-radius: var(--radius-lg);
+    }
+
+    #repo-name {
+        font-size: 1.25rem;
+    }
+
+    .repo-meta {
+        gap: 12px;
+    }
+
+    .repo-meta span {
+        font-size: 0.85rem;
+    }
+
+    #profile-repos-table th,
+    #profile-repos-table td {
+        padding: 12px 8px;
+        font-size: 0.8rem;
+    }
+
+    .deploy-link {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+    }
+
+    .tab-btn {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+
+    .structure-view {
+        gap: 16px;
+    }
+
+    .file-tree {
+        max-height: 250px;
+    }
+
+    .code-viewer {
+        min-height: 350px;
+    }
+
+    #code-display {
+        padding: 12px;
+        font-size: 0.8rem;
+    }
+
+    .markdown-content {
+        padding: 20px;
+    }
+
+    .markdown-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .markdown-content h2 {
+        font-size: 1.25rem;
+    }
+
+    .readme-actions,
+    .analysis-actions {
+        flex-direction: column;
+    }
+
+    .readme-actions button,
+    .analysis-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .chatbot-container {
+        height: 55vh;
+    }
+
+    #chat-messages {
+        padding: 16px;
+    }
+
+    .chat-message {
+        max-width: 90%;
+    }
+
+    .message-content {
+        padding: 12px 14px;
+        font-size: 0.9rem;
+    }
+
+    .chat-input {
+        padding: 12px 16px;
+    }
+
+    #user-message {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+
+    #send-message-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .management-container {
+        padding: 20px;
+    }
+
+    .command-box {
+        flex-direction: column;
+    }
+
+    .command-box pre {
+        font-size: 0.8rem;
+    }
+
+    .step-guide {
+        padding: 16px;
+    }
+
+    footer {
+        padding: 32px 0;
+        margin-top: 60px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    section {
+        padding: 60px 0;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    .logo {
+        font-size: 1.25rem;
+    }
+
+    .logo i {
+        font-size: 1.5rem;
+    }
+
+    .hero {
+        padding: 60px 0;
+    }
+
+    .hero-content h2 {
+        font-size: 1.75rem;
+    }
+
+    .hero-content p {
+        font-size: 0.95rem;
+    }
+
+    .repo-input input {
+        padding: 14px 16px;
+        font-size: 0.9rem;
+    }
+
+    .repo-input button {
+        padding: 14px 24px;
+        font-size: 0.9rem;
+    }
+
+    .feature-card {
+        padding: 20px;
+    }
+
+    .feature-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 1.5rem;
+    }
+
+    .feature-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .feature-card p {
+        font-size: 0.875rem;
+    }
+
+    .dashboard-tabs {
+        gap: 0;
+    }
+
+    .tab-btn {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+
+    .file-tree h3 {
+        font-size: 0.75rem;
+    }
+
+    .file-tree li {
+        font-size: 0.85rem;
+        padding: 5px 6px;
+    }
+
+    .chatbot-container {
+        height: 50vh;
+    }
+
+    .message-content h2,
+    .message-content h3 {
+        font-size: 0.9rem;
+    }
+}
+
+/* Large Screens */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1400px;
+    }
+
+    .hero-content h2 {
+        font-size: 4.5rem;
+    }
+
+    .hero-content p {
+        font-size: 1.35rem;
+    }
+
+    .repo-input {
+        max-width: 700px;
+    }
+
+    .structure-view {
+        grid-template-columns: 380px 1fr;
+        height: 72vh;
+    }
+}
+
+/* Print Styles */
+@media print {
+
+    header,
+    footer,
+    #loading-overlay,
+    .chat-input,
+    .readme-actions,
+    .analysis-actions,
+    .dashboard-tabs,
+    .copy-command {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    .markdown-content {
+        border: none;
+        padding: 0;
+        background: white;
+    }
+
+    .markdown-content h1,
+    .markdown-content h2,
+    .markdown-content h3 {
+        color: black;
+    }
+
+    .markdown-content p,
+    .markdown-content li {
+        color: #333;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: rgba(255, 255, 255, 0.3);
+        --text-secondary: #c0c0c0;
+    }
+}
+
+/* Dark Mode Preference (already dark, but ensure consistency) */
+@media (prefers-color-scheme: dark) {
+    /* Already optimized for dark mode */
+}
