@@ -44,25 +44,25 @@
                     <p>Extract insights, analyze code structure, and get intelligent recommendations with our AI-powered
                         analyzer. No signup required.</p>
                     <div class="analysis-toggle">
-                        <button class="toggle-btn" data-mode="repo">Analyze Repo</button>
+                        <button class="toggle-btn active" data-mode="repo">Analyze Repo</button>
                         <button class="toggle-btn" data-mode="profile">Analyze Profile</button>
                         <button class="toggle-btn" data-mode="bulk">Bulk Compare</button>
                     </div>
 
                     <div id="repo-input-container" class="repo-input">
-                        <input type="text" id="repo-url"
+                        <input type="text" id="repo-url" aria-label="Enter GitHub repository URL"
                             placeholder="Enter GitHub repository URL (e.g., https://github.com/username/repo)">
                         <button id="analyze-btn">Analyze Repository</button>
                     </div>
 
                     <div id="profile-input-container" class="repo-input hidden">
-                        <input type="text" id="profile-url"
+                        <input type="text" id="profile-url" aria-label="Enter GitHub Username or Profile URL"
                             placeholder="Enter GitHub Username or Profile URL">
                         <button id="analyze-profile-btn">Analyze Profile</button>
                     </div>
 
                     <div id="bulk-input-container" class="repo-input hidden">
-                        <textarea id="bulk-profiles-input" rows="3"
+                        <textarea id="bulk-profiles-input" rows="3" aria-label="Enter GitHub usernames or URLs"
                             placeholder="Enter up to 100 GitHub usernames/URLs (comma-separated or line-by-line)"></textarea>
                         <button id="analyze-bulk-btn">Rank Profiles</button>
                     </div>
@@ -156,7 +156,7 @@
                                 </div>
                             </div>
                             <div class="chat-input">
-                                <input type="text" id="user-message"
+                                <input type="text" id="user-message" aria-label="Type your message"
                                     placeholder="Ask about code, structure, or functionality...">
                                 <button id="send-message-btn"><i class="fas fa-paper-plane"></i></button>
                             </div>

@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     try { packageJsonContent = await fetchFileContent(packageJsonFile.url); } catch (e) { console.warn('Could not fetch package.json:', e); }
                 }
                 const content = generateSmartReadme(currentRepoData, currentRepoLanguages, currentRepoStructure, packageJsonContent);
+                readmeContentEl.setAttribute('data-raw-markdown', encodeURIComponent(content));
                 const safeHtml = renderMarkdownSafely(content);
                 readmeContentEl.innerHTML = safeHtml;
                 readmeContentEl.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
@@ -99,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     try { packageJsonContent = await fetchFileContent(packageJsonFile.url); } catch (e) { console.warn('Could not fetch package.json:', e); }
                 }
                 const content = generateSmartAnalysisReport(currentRepoData, currentRepoLanguages, currentRepoStructure, packageJsonContent);
+                analysisContentEl.setAttribute('data-raw-markdown', encodeURIComponent(content));
                 const safeHtml = renderMarkdownSafely(content);
                 analysisContentEl.innerHTML = safeHtml;
                 analysisContentEl.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
@@ -243,6 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(content => {
                 const readmeEl = document.getElementById('readme-content');
                 if (readmeEl) {
+                    readmeEl.setAttribute('data-raw-markdown', encodeURIComponent(content));
                     const safeHtml = renderMarkdownSafely(content);
                     readmeEl.innerHTML = safeHtml;
                     readmeEl.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
@@ -326,7 +329,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function copyToClipboard(selector, type) {
         const element = document.querySelector(selector);
         if (!element) return;
-        const textToCopy = element.innerText || element.textContent;
+        
+        let textToCopy = '';
+        if (element.hasAttribute('data-raw-markdown')) {
+            textToCopy = decodeURIComponent(element.getAttribute('data-raw-markdown'));
+        } else {
+            textToCopy = element.innerText || element.textContent;
+        }
+
         navigator.clipboard.writeText(textToCopy).then(() => {
             alert(`${type} copied to clipboard!`);
         }).catch(err => {
@@ -337,7 +347,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function downloadFile(filename, contentSelector) {
         const element = document.querySelector(contentSelector);
         if (!element) return;
-        const content = element.innerText;
+        
+        let content = '';
+        if (element.hasAttribute('data-raw-markdown')) {
+            content = decodeURIComponent(element.getAttribute('data-raw-markdown'));
+        } else {
+            content = element.innerText;
+        }
+
         const link = document.createElement('a');
         link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
         link.setAttribute('download', filename);
