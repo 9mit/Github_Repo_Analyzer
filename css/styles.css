@@ -1,4 +1,4 @@
-﻿/* ============================================================================
+/* ============================================================================
    CODEBUDDY - Premium Modern Dark Theme
    ============================================================================ */
 
@@ -283,7 +283,8 @@ nav ul li a.active {
     box-shadow: var(--shadow-lg), 0 0 40px var(--primary-glow);
 }
 
-.repo-input input {
+.repo-input input,
+.repo-input textarea {
     flex: 1;
     padding: 16px 20px;
     border: none;
@@ -294,11 +295,20 @@ nav ul li a.active {
     font-family: var(--font-primary);
 }
 
-.repo-input input::placeholder {
+.repo-input textarea {
+    resize: vertical;
+    min-height: 56px;
+    max-height: 200px;
+    line-height: 1.5;
+}
+
+.repo-input input::placeholder,
+.repo-input textarea::placeholder {
     color: var(--text-muted);
 }
 
-.repo-input input:focus {
+.repo-input input:focus,
+.repo-input textarea:focus {
     outline: none;
 }
 
@@ -1974,4 +1984,43 @@ footer p {
 
 .star-badge i {
     font-size: 0.8rem;
+}
+
+/* ============================================================================
+   BULK LEADERBOARD STYLES
+   ============================================================================ */
+
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-weight: bold;
+    color: #fff;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+}
+
+.rank-1 { background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%); color: #000; border: none; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+.rank-2 { background: linear-gradient(135deg, #e0e0e0 0%, #9e9e9e 100%); color: #000; border: none; }
+.rank-3 { background: linear-gradient(135deg, #cd7f32 0%, #a0522d 100%); color: #fff; border: none; }
+
+.score-bar-container {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100px;
+}
+
+.score-bar {
+    height: 100%;
+    background: var(--accent-gradient);
+    border-radius: 4px;
+    transition: width 1s ease-out;
 }

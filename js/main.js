@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleBtns = document.querySelectorAll('.toggle-btn');
     const repoInputContainer = document.getElementById('repo-input-container');
     const profileInputContainer = document.getElementById('profile-input-container');
+    const bulkInputContainer = document.getElementById('bulk-input-container');
 
     toggleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -41,12 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            if (mode === 'repo') {
-                if (repoInputContainer) repoInputContainer.classList.remove('hidden');
-                if (profileInputContainer) profileInputContainer.classList.add('hidden');
-            } else {
-                if (repoInputContainer) repoInputContainer.classList.add('hidden');
-                if (profileInputContainer) profileInputContainer.classList.remove('hidden');
+            if (repoInputContainer) repoInputContainer.classList.add('hidden');
+            if (profileInputContainer) profileInputContainer.classList.add('hidden');
+            if (bulkInputContainer) bulkInputContainer.classList.add('hidden');
+
+            if (mode === 'repo' && repoInputContainer) {
+                repoInputContainer.classList.remove('hidden');
+            } else if (mode === 'profile' && profileInputContainer) {
+                profileInputContainer.classList.remove('hidden');
+            } else if (mode === 'bulk' && bulkInputContainer) {
+                bulkInputContainer.classList.remove('hidden');
             }
         });
     });

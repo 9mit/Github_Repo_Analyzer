@@ -44,8 +44,9 @@
                     <p>Extract insights, analyze code structure, and get intelligent recommendations with our AI-powered
                         analyzer. No signup required.</p>
                     <div class="analysis-toggle">
-                        <button class="toggle-btn active" data-mode="repo">Analyze Repo</button>
+                        <button class="toggle-btn" data-mode="repo">Analyze Repo</button>
                         <button class="toggle-btn" data-mode="profile">Analyze Profile</button>
+                        <button class="toggle-btn" data-mode="bulk">Bulk Compare</button>
                     </div>
 
                     <div id="repo-input-container" class="repo-input">
@@ -58,6 +59,12 @@
                         <input type="text" id="profile-url"
                             placeholder="Enter GitHub Username or Profile URL">
                         <button id="analyze-profile-btn">Analyze Profile</button>
+                    </div>
+
+                    <div id="bulk-input-container" class="repo-input hidden">
+                        <textarea id="bulk-profiles-input" rows="3"
+                            placeholder="Enter up to 100 GitHub usernames/URLs (comma-separated or line-by-line)"></textarea>
+                        <button id="analyze-bulk-btn">Rank Profiles</button>
                     </div>
                 </div>
                 <div class="hero-image">
@@ -229,6 +236,37 @@
                                 </tr>
                             </thead>
                             <tbody id="profile-repos-body">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bulk Dashboard Section -->
+        <section id="bulk-dashboard" class="profile-dashboard hidden">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>Expert Profile Leaderboard</h2>
+                    <div class="profile-meta">
+                        <span id="bulk-leaderboard-count"><i class="fas fa-users"></i> Ranked 0 Profiles</span>
+                    </div>
+                </div>
+
+                <div class="profile-content">
+                    <div class="table-responsive">
+                        <table id="bulk-repos-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Profile</th>
+                                    <th>Total Stars</th>
+                                    <th>Top Tech</th>
+                                    <th style="min-width: 150px;">Quality Score</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bulk-repos-body">
                                 <!-- Data will be populated here -->
                             </tbody>
                         </table>
@@ -484,6 +522,7 @@
     <script src="js/ai-engine.js?v=1.2"></script>
     <script src="js/chatbot.js?v=1.2"></script>
     <script src="js/profile-analyzer.js?v=1.2"></script>
+    <script src="js/bulk-analyzer.js?v=1.2"></script>
     <script src="js/main.js?v=1.2"></script>
 
 </body>

@@ -47,3 +47,4 @@ dist/
 build/
 .cache/
 *.log
+bulk-analysis-methodology.md
